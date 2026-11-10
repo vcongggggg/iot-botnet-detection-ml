@@ -300,13 +300,25 @@ class AttackerWebHandler(BaseHTTPRequestHandler):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description="Kẻ tấn công - Red Team Botnet Console")
+    parser.add_argument("--host", type=str, default="0.0.0.0", help="Địa chỉ host lắng nghe Web Console")
+    parser.add_argument("--port", type=int, default=ATTACKER_PORT, help="Cổng Web Console (mặc định: 9090)")
+    parser.add_argument("--guardian-url", type=str, default=GUARDIAN_URL, help="URL Trạm gác AI NIDS")
+    parser.add_argument("--victim-ip", type=str, default=VICTIM_HOST, help="Địa chỉ IP của thiết bị IoT nạn nhân")
+    parser.add_argument("--victim-telnet-port", type=int, default=VICTIM_TELNET_PORT, help="Cổng Telnet nạn nhân")
     parser.add_argument("--auto-demo", action="store_true", help="Chạy tự động cả 5 kịch bản qua CLI và in bảng kết quả")
     args = parser.parse_args()
+
+    ATTACKER_PORT = args.port
+    GUARDIAN_URL = args.guardian_url.rstrip("/")
+    VICTIM_HOST = args.victim_ip
+    VICTIM_TELNET_PORT = args.victim_telnet_port
 
     if args.auto_demo:
         print("=" * 80)
         print(" CHẠY TỰ ĐỘNG KIỂM THỬ XÂM NHẬP 3 BÊN (ATTACKER -> AI NIDS -> VICTIM IoT)")
+        print(f" - Trạm gác AI NIDS: {GUARDIAN_URL}")
+        print(f" - Thiết bị IoT đích: {VICTIM_HOST}:{VICTIM_TELNET_PORT}")
         print("=" * 80)
         for sc_id, title, ip in [
             ("benign_traffic", "KỊCH BẢN 0: LƯU LƯỢNG THIẾT BỊ IoT SẠCH (BENIGN)", "192.168.1.20 (SmartHome-User)"),
@@ -316,15 +328,17 @@ if __name__ == "__main__":
             ("hajime_ddos", "KỊCH BẢN 4: HAJIME BOTNET DDoS SYN FLOOD", "192.168.1.108 (Attacker-DDoS)")
         ]:
             print(f"\n>>> Đang chạy: {title}")
-            out = launch_scenario(sc_id, attacker_ip=ip)
+            out = launch_scenario(sc_id, attacker_ip=ip, guardian_url=GUARDIAN_URL)
             for r in out[:3]:
                 print(f"   [{r['time']}] {r['src_ip']} -> Port {r['dst_port']} ({r['conn_state']}) | AI: {r['prediction']} | {r['behavior']} ({r['confidence']}) -> [{r['action']}]")
         sys.exit(0)
 
     print("=" * 72)
     print(" KHỞI ĐỘNG BÊN 1: GIAO DIỆN KẺ TẤN CÔNG (RED TEAM BOTNET CONSOLE)")
-    print(f" - Mở trình duyệt tại: http://127.0.0.1:{ATTACKER_PORT}")
+    print(f" - Mở trình duyệt tại         : http://127.0.0.1:{ATTACKER_PORT}")
+    print(f" - Kết nối Trạm gác AI NIDS   : {GUARDIAN_URL}")
+    print(f" - Thiết bị IoT Nạn nhân đích : {VICTIM_HOST}:{VICTIM_TELNET_PORT}")
     print("=" * 72)
-    server = HTTPServer(("0.0.0.0", ATTACKER_PORT), AttackerWebHandler)
+    server = HTTPServer((args.host, ATTACKER_PORT), AttackerWebHandler)
     server.serve_forever()
 

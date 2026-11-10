@@ -1,10 +1,13 @@
 """
-BÊN 3 (TRẠM GÁC AI NIDS - ADMIN SOC DASHBOARD): HỆ THỐNG PHÁT HIỆN VÀ PHÂN LOẠI MÃ ĐỘC BOTNET IoT
+BÊN 2 (TRẠM GÁC AI NIDS - ADMIN SOC DASHBOARD): HỆ THỐNG PHÁT HIỆN VÀ PHÂN LOẠI MÃ ĐỘC BOTNET IoT
 Phục vụ Chương 3 (Mục 3.2.1 - Chức năng Người Quản Trị Admin):
 - Nạp trực tiếp mô hình Machine Learning LightGBM (iot_nids_bundle.joblib) đã huấn luyện trên 4.55 triệu dòng IoT-23.
 - Phân tích từng luồng mạng theo thời gian thực (Real-time Flow Inspection).
 - Phân loại chi tiết hành vi Botnet (Mirai Port Scan, Telnet Brute-Force, Torii C&C, Hajime DDoS Flood).
 - Cung cấp Giao diện Quản trị viên (Admin SOC Dashboard) tại cổng 5000 với cơ chế IPS tự động khóa IP kẻ tấn công.
+
+LƯU Ý AN NINH: Hệ thống được thiết kế phục vụ môi trường phòng Lab / Demo kiểm thử xâm nhập.
+Admin REST API không có cơ chế xác thực JWT/Token (CORS *), chỉ triển khai trong mạng nội bộ tin cậy.
 """
 
 import os
@@ -13,6 +16,7 @@ import csv
 import io
 import time
 import json
+import argparse
 import joblib
 import numpy as np
 import pandas as pd
@@ -26,6 +30,7 @@ warnings.filterwarnings("ignore")
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BUNDLE_PATH = os.path.join(BASE_DIR, "iot_nids_bundle.joblib")
 GUARDIAN_PORT = int(os.environ.get("GUARDIAN_PORT", 5000))
+GUARDIAN_HOST = os.environ.get("GUARDIAN_HOST", "0.0.0.0")
 
 print(f"[*] Đang nạp mô hình AI NIDS từ: {BUNDLE_PATH} ...")
 bundle = joblib.load(BUNDLE_PATH)
@@ -54,7 +59,7 @@ soc_state = {
     "benign_count": 0,
     "malicious_count": 0,
     "blocked_requests": 0,
-    "avg_inference_ms": 0.42,
+    "avg_inference_ms": 0.0,
     "blocked_ips": {},  # ip -> {"reason": ..., "time": ..., "count": ...}
     "flow_logs": []     # Lưu tối đa 150 luồng gần nhất để hiển thị Real-time
 }
@@ -130,7 +135,10 @@ def inspect_single_flow(flow_dict):
 
     # Cập nhật thống kê
     soc_state["total_flows"] += 1
-    soc_state["avg_inference_ms"] = round(0.85 * soc_state["avg_inference_ms"] + 0.15 * elapsed_ms, 2)
+    if soc_state["total_flows"] == 1:
+        soc_state["avg_inference_ms"] = round(elapsed_ms, 2)
+    else:
+        soc_state["avg_inference_ms"] = round(0.85 * soc_state["avg_inference_ms"] + 0.15 * elapsed_ms, 2)
 
     behavior_detail = classify_botnet_behavior(flow_dict, pred)
     action = "ALLOW"
@@ -464,10 +472,20 @@ class GuardianSOCHandler(BaseHTTPRequestHandler):
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Trạm Gác AI NIDS - Admin SOC Dashboard")
+    parser.add_argument("--host", type=str, default=GUARDIAN_HOST, help="Địa chỉ host lắng nghe (mặc định: 0.0.0.0)")
+    parser.add_argument("--port", type=int, default=GUARDIAN_PORT, help="Cổng dịch vụ (mặc định: 5000)")
+    parser.add_argument("--victim-url", type=str, default="http://127.0.0.1:8088", help="URL thiết bị IoT nạn nhân")
+    args = parser.parse_args()
+
+    listen_host = args.host
+    listen_port = args.port
+
     print("=" * 72)
-    print(" KHỞI ĐỘNG BÊN 3: TRẠM GÁC AI IoT-NIDS (ADMIN SOC DASHBOARD)")
-    print(f" - Địa chỉ truy cập Admin Dashboard: http://127.0.0.1:{GUARDIAN_PORT}")
-    print(f" - API nhận luồng kiểm tra         : http://0.0.0.0:{GUARDIAN_PORT}/api/inspect_flow")
+    print(" KHỞI ĐỘNG BÊN 2: TRẠM GÁC AI IoT-NIDS (ADMIN SOC DASHBOARD)")
+    print(f" - Địa chỉ truy cập Admin Dashboard: http://{listen_host}:{listen_port}")
+    print(f" - API nhận luồng kiểm tra         : http://{listen_host}:{listen_port}/api/inspect_flow")
+    print(f" - Target Victim IoT URL           : {args.victim_url}")
     print("=" * 72)
-    server = HTTPServer(("0.0.0.0", GUARDIAN_PORT), GuardianSOCHandler)
+    server = HTTPServer((listen_host, listen_port), GuardianSOCHandler)
     server.serve_forever()

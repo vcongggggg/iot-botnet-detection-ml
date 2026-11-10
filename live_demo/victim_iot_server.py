@@ -1,5 +1,5 @@
 """
-BÊN 2 (NẠN NHÂN - VICTIM): HỆ THỐNG GIẢ LẬP THIẾT BỊ NHÀ THÔNG MINH IoT (SMART CAMERA & SENSOR GATEWAY)
+BÊN 3 (NẠN NHÂN - VICTIM): HỆ THỐNG GIẢ LẬP THIẾT BỊ NHÀ THÔNG MINH IoT (SMART CAMERA & SENSOR GATEWAY)
 Phục vụ Chương 3: Chức năng của người sử dụng (User) & Thiết bị IoT trong mô hình 3 bên.
 - Cung cấp Giao diện Web cho người dùng cuối (User) xem trạng thái Camera/Cảm biến tại cổng 8088.
 - Mở cổng dịch vụ mô phỏng Telnet IoT (2323) để nhận các kết nối quản trị từ xa.
@@ -12,6 +12,7 @@ import time
 import json
 import random
 import socket
+import argparse
 import threading
 import urllib.request
 from http.server import HTTPServer, BaseHTTPRequestHandler
@@ -20,6 +21,7 @@ from datetime import datetime
 GUARDIAN_URL = os.environ.get("GUARDIAN_URL", "http://127.0.0.1:5000")
 VICTIM_HTTP_PORT = int(os.environ.get("VICTIM_HTTP_PORT", 8088))
 VICTIM_TELNET_PORT = int(os.environ.get("VICTIM_TELNET_PORT", 2323))
+VICTIM_HOST = os.environ.get("VICTIM_HOST", "0.0.0.0")
 
 # Trạng thái thiết bị IoT cho người dùng sử dụng
 device_state = {
@@ -257,13 +259,26 @@ def auto_telemetry_loop():
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Thiết bị IoT Nạn nhân (DUT-SmartCam-Pro-X1)")
+    parser.add_argument("--host", type=str, default=VICTIM_HOST, help="Địa chỉ host lắng nghe (mặc định: 0.0.0.0)")
+    parser.add_argument("--http-port", type=int, default=VICTIM_HTTP_PORT, help="Cổng Web UI (mặc định: 8088)")
+    parser.add_argument("--telnet-port", type=int, default=VICTIM_TELNET_PORT, help="Cổng Telnet Daemon (mặc định: 2323)")
+    parser.add_argument("--guardian-url", type=str, default=GUARDIAN_URL, help="URL Trạm gác AI NIDS (mặc định: http://127.0.0.1:5000)")
+    args = parser.parse_args()
+
+    VICTIM_HOST = args.host
+    VICTIM_HTTP_PORT = args.http_port
+    VICTIM_TELNET_PORT = args.telnet_port
+    GUARDIAN_URL = args.guardian_url.rstrip("/")
+
     print("=" * 70)
-    print(" KHỞI ĐỘNG BÊN 2: THIẾT BỊ IoT NẠN NHÂN (SMART CAMERA & SENSOR)")
-    print(f" - Giao diện Người sử dụng (Web): http://127.0.0.1:{VICTIM_HTTP_PORT}")
+    print(" KHỞI ĐỘNG BÊN 3: THIẾT BỊ IoT NẠN NHÂN (SMART CAMERA & SENSOR)")
+    print(f" - Giao diện Người sử dụng (Web): http://{VICTIM_HOST}:{VICTIM_HTTP_PORT}")
     print(f" - Cổng dịch vụ Telnet IoT      : Port {VICTIM_TELNET_PORT}")
+    print(f" - Kết nối Trạm gác AI NIDS     : {GUARDIAN_URL}")
     print("=" * 70)
     threading.Thread(target=run_telnet_honeypot, daemon=True).start()
     threading.Thread(target=auto_telemetry_loop, daemon=True).start()
-    server = HTTPServer(("0.0.0.0", VICTIM_HTTP_PORT), IoTDeviceHTTPHandler)
+    server = HTTPServer((VICTIM_HOST, VICTIM_HTTP_PORT), IoTDeviceHTTPHandler)
     server.serve_forever()
 
