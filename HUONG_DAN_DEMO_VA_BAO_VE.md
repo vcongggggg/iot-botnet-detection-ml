@@ -122,9 +122,9 @@ Giả sử **Laptop 1 (Nguyễn Công Minh - Blue Team & IoT)** có địa chỉ
   - Tuy nhiên, một cây quyết định đơn lẻ (Decision Tree) rất dễ bị quá khớp (Overfitting) khi gặp biến thể gói tin mới ngoài thực tế. Trong khi đó, **LightGBM** là tập hợp chuỗi 100 cây Boosting (Histogram-based learning) với `max_depth=6`, vừa chống quá khớp nhờ học tăng cường, vừa có thời gian huấn luyện nhanh nhất (`19.83 giây` trên 4,55 triệu dòng — nhanh gấp `2.8 lần` Decision Tree `55.12s` và gấp `3.6 lần` Random Forest `71.61s`). Tốc độ suy luận trên tập Test 1,14 triệu dòng đạt `4.89 giây` (tương đương `0.0043 ms/luồng` ở chế độ batch), cực kỳ lý tưởng cho cổng Gateway IoT cấu hình thấp.
 
 ### Câu hỏi 3: Đặc trưng nào trong bộ dữ liệu IoT-23 đóng vai trò quan trọng nhất để phát hiện Botnet?
-- **Trả lời:** Dựa trên phân tích Feature Importance của mô hình LightGBM, 5 đặc trưng quan trọng nhất là:
-  1. `id.resp_p` (Cổng đích — `756 splits`): Phản ánh mục tiêu dịch vụ mà Botnet nhắm tới (như cổng Telnet `23/2323`, SSH `22`, HTTP `80/8080`, TR-069 `7547`).
-  2. `id.orig_p` (Cổng nguồn — `702 splits`): Nhận diện quy luật sinh cổng nguồn tự động của công cụ quét.
-  3. `conn_state` (Trạng thái kết nối Zeek — `356 splits`): Đặc trưng cốt lõi phân biệt quét cổng/DDoS (`S0` — gửi SYN nhưng không có phản hồi, `REJ`/`RSTO`) với kết nối hoàn chỉnh (`SF`).
-  4. `duration` (Thời lượng phiên — `349 splits`): Phân biệt các luồng quét tốc độ cao (`duration ~ 0`) với kết nối duy trì phiên C&C (`Torii`).
-  5. `history` (Chuỗi lịch sử cờ TCP — `294 splits`): Ghi lại trình tự bắt tay TCP (`S`, `ShADadFf`, `Sr`), giúp phát hiện ngay các gói SYN bất thường.
+- **Trả lời:** Dựa trên phân tích Feature Importance từ bundle huấn luyện thật của mô hình LightGBM, 5 đặc trưng quan trọng nhất theo số lần phân tách nút (Split Count) là:
+  1. `id.resp_p` (Cổng đích — `1380 splits`): Phản ánh trực tiếp mục tiêu dịch vụ nhạy cảm mà Botnet nhắm tới (như cổng Telnet `23/2323`, SSH `22`, HTTP `80/8080`, TR-069 `7547`, C&C `4444/6667`).
+  2. `history` (Chuỗi lịch sử cờ TCP — `318 splits`): Ghi lại trình tự bắt tay TCP (`S`, `ShADadFr`, `Sr`), giúp phát hiện ngay các gói SYN bất thường trong các đòn quét bão táp.
+  3. `id.orig_p` (Cổng nguồn — `289 splits`): Nhận diện quy luật sinh cổng nguồn tự động hoặc tuần tự trong mã nguồn công cụ quét của Botnet.
+  4. `duration` (Thời lượng phiên — `281 splits`): Phân biệt các luồng quét tốc độ cao (`duration ~ 0`) với kết nối duy trì phiên C&C dài hạn (`Torii`).
+  5. `orig_ip_bytes` (Tổng dung lượng byte IP từ nguồn — `229 splits`): Nhận diện lưu lượng phát tán gói tin đột biến từ mã độc.

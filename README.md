@@ -127,7 +127,7 @@ Xem chi tiết kịch bản 4 bước bảo vệ và cách chạy 2 laptop qua L
 [3] G. Ke et al., "LightGBM: A Highly Efficient Gradient Boosting Decision Tree," NeurIPS 30, pp. 3146–3154, 2017.  
 [4] T. Chen and C. Guestrin, "XGBoost: A Scalable Tree Boosting System," ACM KDD '16, pp. 785–794, 2016.  
 [5] S. Edwards and I. Profetis, "Hajime: Analysis of a decentralized internet worm for IoT devices," Rapidity Networks, 2016.  
-[6] J. Neduchal, M. Hron, and A. Caruso, "Torii Botnet: Not Another Mirai Variant," Avast Threat Labs, Sept. 2018.  
+[6] J. Kroustek, V. Iliushin, A. Shirokova, J. Neduchal, and M. Hron, "Torii botnet - Not another Mirai variant," Avast Blog, Sept. 2018. https://blog.avast.com/new-torii-botnet-threat-research  
 [7] V. Paxson, "Bro: A system for detecting network intruders in real-time," Computer Networks, vol. 31, pp. 2435–2463, 1999.  
 [8] L. Breiman, "Random Forests," Machine Learning, vol. 45, no. 1, pp. 5–32, 2001.  
 [9] Y. Meidan et al., "N-BaIoT: Network-Based Detection of IoT Botnet Attacks Using Deep Autoencoders," IEEE Pervasive Computing, 2018.  

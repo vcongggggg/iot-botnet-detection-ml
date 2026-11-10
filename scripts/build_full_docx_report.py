@@ -941,11 +941,11 @@ def build_complete_word_report():
     add_body_para(
         doc,
         "Trích xuất trọng số đóng góp đặc trưng (Feature Importance theo số lần phân tách nút - Split Count) từ mô hình LightGBM (Hình 2.13 và Hình 2.14) chỉ ra 5 đặc trưng quyết định tới khả năng nhận diện Botnet: "
-        "(1) id.resp_p (Cổng đích - 756 lần tách nút): Phản ánh trực tiếp các cổng dịch vụ nhạy cảm mà Mirai, Hajime và Torii nhắm tới như Telnet (23, 2323), SSH (22), HTTP (80, 8080), TR-069 (7547) và C&C (4444, 6667); "
-        "(2) id.orig_p (Cổng nguồn - 702 lần tách nút): Phản ánh quy luật cấp phát cổng nguồn tuần tự hoặc cố định trong mã nguồn C của công cụ quét Mirai; "
-        "(3) conn_state (Trạng thái kết nối - 356 lần tách nút): Phân tách tức thì các luồng quét cổng/DDoS (S0, REJ, RSTO) khỏi luồng giao tiếp hoàn chỉnh (SF); "
-        "(4) duration (Thời lượng kết nối - 349 lần tách nút): Nhận diện các phiên quét chớp nhoáng (0.0s) hoặc phiên giữ kết nối C&C bất thường; "
-        "và (5) history (Lịch sử cờ TCP - 294 lần tách nút): Phát hiện chuỗi bắt tay TCP dị thường (S, Sr, ShADadFr).",
+        "(1) id.resp_p (Cổng đích - 1380 lần tách nút): Phản ánh trực tiếp các cổng dịch vụ nhạy cảm mà Mirai, Hajime và Torii nhắm tới như Telnet (23, 2323), SSH (22), HTTP (80, 8080), TR-069 (7547) và C&C (4444, 6667); "
+        "(2) history (Lịch sử trạng thái cờ TCP - 318 lần tách nút): Phát hiện chuỗi bắt tay TCP dị thường (S, Sr, ShADadFr) trong các pha quét thăm dò và tấn công bão táp; "
+        "(3) id.orig_p (Cổng nguồn - 289 lần tách nút): Phản ánh quy luật cấp phát cổng nguồn tuần tự hoặc cố định trong mã nguồn C của công cụ quét Mirai; "
+        "(4) duration (Thời lượng kết nối - 281 lần tách nút): Nhận diện các phiên quét chớp nhoáng (0.0s) hoặc phiên giữ kết nối C&C bất thường; "
+        "và (5) orig_ip_bytes (Tổng dung lượng byte IP từ nguồn - 229 lần tách nút): Nhận diện lưu lượng phát tán gói tin đột biến từ mã độc.",
         bold_prefix="Thứ ba - Giải mã hộp đen AI qua mức độ quan trọng của đặc trưng (Feature Importance): "
     )
 
@@ -1086,7 +1086,7 @@ def build_complete_word_report():
         "[3] G. Ke, Q. Meng, T. Finley, T. Wang, W. Chen, W. Ma, Q. Ye, and T.-Y. Liu, \"LightGBM: A Highly Efficient Gradient Boosting Decision Tree,\" in Advances in Neural Information Processing Systems (NeurIPS), vol. 30, Long Beach, CA, USA, 2017, pp. 3146–3154.",
         "[4] T. Chen and C. Guestrin, \"XGBoost: A Scalable Tree Boosting System,\" in Proc. 22nd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining (KDD '16), San Francisco, CA, USA, Aug. 2016, pp. 785–794.",
         "[5] S. Edwards and I. Profetis, \"Hajime: Analysis of a decentralized internet worm for IoT devices,\" Rapidity Networks, Security Research Report, Oct. 2016.",
-        "[6] J. Neduchal, M. Hron, and A. Caruso, \"Torii Botnet: Not Another Mirai Variant,\" Avast Threat Labs Technical Analysis Report, Sept. 2018.",
+        "[6] J. Kroustek, V. Iliushin, A. Shirokova, J. Neduchal, and M. Hron, \"Torii botnet - Not another Mirai variant,\" Avast Blog, Sept. 2018. https://blog.avast.com/new-torii-botnet-threat-research",
         "[7] V. Paxson, \"Bro: A system for detecting network intruders in real-time,\" Computer Networks, vol. 31, no. 23–24, pp. 2435–2463, Dec. 1999 (Zeek Network Security Monitor Project).",
         "[8] L. Breiman, \"Random Forests,\" Machine Learning, vol. 45, no. 1, pp. 5–32, Oct. 2001.",
         "[9] Y. Meidan et al., \"N-BaIoT: Network-Based Detection of IoT Botnet Attacks Using Deep Autoencoders,\" IEEE Pervasive Computing, vol. 17, no. 3, pp. 12–22, Jul.–Sept. 2018.",
@@ -1117,3 +1117,4 @@ def build_complete_word_report():
 
 if __name__ == "__main__":
     build_complete_word_report()
+
