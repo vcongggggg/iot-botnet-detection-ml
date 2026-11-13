@@ -835,11 +835,11 @@ def build_complete_word_report():
     )
 
     benchmark_rows = [
-        ("1", "Logistic Regression", "98,32%", "98,82%", "99,34%", "99,08%", "28,67 giây", "Tuyến tính, bỏ sót các luồng C&C phi tuyến"),
-        ("2", "Decision Tree (CART)", "99,99%", "99,99%", "100,00%", "100,00%", "55,12 giây", "Độ chính xác rất cao nhưng cây đơn dễ Overfit"),
-        ("3", "Random Forest (Bagging)", "99,90%", "99,89%", "100,00%", "99,95%", "71,61 giây", "Ổn định nhưng thời gian huấn luyện chậm nhất"),
-        ("4", "XGBoost (Hist Tree)", "99,90%", "99,90%", "100,00%", "99,95%", "31,46 giây", "Hiệu năng cao, tốc độ huấn luyện khá nhanh"),
-        ("5", "LightGBM (Đề xuất)", "99,99%", "99,99%", "100,00%", "99,99%", "19,83 giây", "Ngang DT về độ chính xác, nhanh nhất khi train (19,83s)"),
+        ("1", "Logistic Regression", "98,84%", "99,29%", "99,44%", "99,36%", "5,66 giây", "Tuyến tính, bỏ sót các luồng C&C phi tuyến"),
+        ("2", "Decision Tree (CART)", "99,99%", "99,99%", "99,99%", "99,99%", "24,28 giây", "Độ chính xác rất cao nhưng cây đơn dễ Overfit"),
+        ("3", "Random Forest (Bagging)", "99,89%", "99,88%", "99,99%", "99,94%", "41,53 giây", "Ổn định nhưng thời gian huấn luyện chậm nhất"),
+        ("4", "XGBoost (Hist Tree)", "99,98%", "99,98%", "99,99%", "99,99%", "22,97 giây", "Hiệu năng cao, tốc độ huấn luyện khá nhanh"),
+        ("5", "LightGBM (Đề xuất)", "99,99%", "99,99%", "99,99%", "99,99%", "15,85 giây", "Ngang DT về độ chính xác, nhanh nhất khi train (15,85s)"),
     ]
     add_styled_table(
         doc,
@@ -909,19 +909,19 @@ def build_complete_word_report():
         doc,
         "Để đánh giá toàn diện khả năng phân biệt ngưỡng của các mô hình, nhóm nghiên cứu đã xây dựng script compute_roc.py tính toán trực tiếp diện tích dưới đường cong ROC (ROC-AUC) "
         "trên tập kiểm thử độc lập cho cả 5 mô hình (kết quả ghi nhận tại Bảng 2.5 và Hình 2.12). "
-        "Kết quả cho thấy cả 4 mô hình phi tuyến (Random Forest, LightGBM, XGBoost, Decision Tree) đều đạt diện tích AUC xấp xỉ tuyệt đối (> 0.999), vượt trội hoàn toàn so với mô hình tuyến tính Logistic Regression (AUC = 0.9858). "
+        "Kết quả cho thấy cả 4 mô hình phi tuyến (Random Forest, LightGBM, XGBoost, Decision Tree) đều đạt diện tích AUC xấp xỉ tuyệt đối (> 0.999), vượt trội hoàn toàn so với mô hình tuyến tính Logistic Regression (AUC = 0.9869). "
         "Khi đối sánh giữa LightGBM và Decision Tree: Trên tập validation, Decision Tree đạt F1 100.00% ngang ngửa LightGBM 99.99%. Tuy nhiên, Decision Tree đơn lẻ rất dễ bị quá khớp (Overfitting) với nhiễu môi trường, "
-        "trong khi LightGBM kết hợp chuỗi 100 cây tăng cường (max_depth=6) có khả năng tổng quát hóa cao hơn nhiều, đồng thời thời gian huấn luyện của LightGBM (19.83 giây) nhanh gấp 2.8 lần Decision Tree (55.12 giây) "
-        "và nhanh gấp 3.6 lần Random Forest (71.61 giây).",
+        "trong khi LightGBM kết hợp chuỗi 100 cây tăng cường (max_depth=6) có khả năng tổng quát hóa cao hơn nhiều, đồng thời thời gian huấn luyện của LightGBM (15.85 giây) nhanh gấp 1.5 lần Decision Tree (24.28 giây) "
+        "và nhanh gấp 2.6 lần Random Forest (41.53 giây).",
         bold_prefix="Thứ hai - Kiểm chứng định lượng đường cong ROC và chỉ số AUC thực tế: "
     )
 
     auc_table_rows = [
-        ("1", "Logistic Regression", "0,985773", "50.000 luồng", "Phân loại tuyến tính, đường cong tách xa góc trái"),
-        ("2", "Decision Tree (CART)", "0,999249", "50.000 luồng", "Biên phân lớp bậc thang, dễ bị nhạy cảm nhiễu"),
-        ("3", "Random Forest", "0,999990", "50.000 luồng", "AUC cực cao nhưng chi phí bộ nhớ và train chậm nhất"),
-        ("4", "XGBoost (Hist Tree)", "0,999828", "50.000 luồng", "Hiệu năng phân loại rất tốt, thời gian 31.46s"),
-        ("5", "LightGBM (Đề xuất)", "0,999981", "50.000 luồng", "Tối ưu toàn diện: AUC tiệm cận 1.0, train nhanh nhất (19.83s)"),
+        ("1", "Logistic Regression", "0,986937", "50.000 luồng", "Phân loại tuyến tính, đường cong tách xa góc trái"),
+        ("2", "Decision Tree (CART)", "0,999363", "50.000 luồng", "Biên phân lớp bậc thang, dễ bị nhạy cảm nhiễu"),
+        ("3", "Random Forest", "0,999977", "50.000 luồng", "AUC cực cao nhưng chi phí bộ nhớ và train chậm nhất"),
+        ("4", "XGBoost (Hist Tree)", "0,999879", "50.000 luồng", "Hiệu năng phân loại rất tốt, thời gian 22,97s"),
+        ("5", "LightGBM (Đề xuất)", "1,000000", "50.000 luồng", "Tối ưu toàn diện: AUC tuyệt đối 1,000000 (mẫu 50.000 test), train nhanh nhất (15,85s)"),
     ]
     add_styled_table(
         doc,
@@ -1063,7 +1063,7 @@ def build_complete_word_report():
         "của Nhóm 4 đã hoàn thành xuất sắc 100% các mục tiêu đề ra với những kết quả nổi bật sau:"
     )
     add_bullet_para(doc, "Về mặt cơ sở lý thuyết và dữ liệu: ", "Đã hệ thống hóa toàn diện kiến trúc mạng IoT, bề mặt tấn công và giải phẫu chi tiết vòng đời hoạt động của 3 họ mã độc Mirai, Hajime, Torii trên cấu trúc nhật ký Zeek Conn-Log. Xử lý thành công toàn bộ 100% bộ dữ liệu quốc tế Stratosphere IoT-23 gồm 5.696.295 bản ghi bằng kỹ thuật chia tách phân tầng Stratified 80/20 (4.557.036 dòng Train / 1.139.259 dòng Test độc lập), triệt tiêu hoàn toàn hiện tượng rò rỉ dữ liệu (Data Leakage).")
-    add_bullet_para(doc, "Về mặt huấn luyện và đánh giá mô hình học máy: ", "Đã thực nghiệm đối sánh khách quan 5 thuật toán (Logistic Regression, Decision Tree, Random Forest, XGBoost, LightGBM). Chứng minh được mô hình LightGBM ngang ngửa Decision Tree về độ chính xác (Accuracy = 99,99%, F1-Score = 99,99%), vượt trội hoàn toàn về tốc độ huấn luyện (19,83 giây so với 55,12 giây) và thời gian suy luận trên 1,13 triệu dòng kiểm thử độc lập chỉ mất 4,89 giây (0,0043 ms/luồng).")
+    add_bullet_para(doc, "Về mặt huấn luyện và đánh giá mô hình học máy: ", "Đã thực nghiệm đối sánh khách quan 5 thuật toán (Logistic Regression, Decision Tree, Random Forest, XGBoost, LightGBM). Chứng minh được mô hình LightGBM ngang ngửa Decision Tree về độ chính xác (Accuracy = 99,99%, F1-Score = 99,99%), vượt trội hoàn toàn về tốc độ huấn luyện (15,85 giây so với 24,28 giây) và thời gian suy luận trên 1,13 triệu dòng kiểm thử độc lập chỉ mất 4,89 giây (0,0043 ms/luồng).")
     add_bullet_para(doc, "Về mặt xây dựng hệ thống thực tiễn: ", "Đã phát triển thành công hệ thống phần mềm giả lập Tấn công - Phòng thủ 3 bên hoàn chỉnh gồm: Kẻ tấn công Red Team Console (:9090), Trạm gác AI NIDS/IPS cho Admin SOC (:5000), và Thiết bị IoT Nạn nhân cho Người sử dụng (:8088 & :2323), hỗ trợ tự động chặn IP độc hại theo thời gian thực.")
 
     add_heading_custom(doc, "2. Hạn chế của đề tài", level=2)
