@@ -1,0 +1,21 @@
+Evaluation_Type,Class_or_Family,Total_Samples,Correct_Predictions,Precision,Recall,F1_Score,Metric_Note
+Binary_Model_Per_Family_Recall,Benign,99592,99475,0.9988252068439232,0.9988252068439232,0.9994122581844304,True Negative Rate: 99.88%
+Binary_Model_Per_Family_Recall,PortScan,1032157,1032148,1.0,0.9999912803962963,0.9999956401791402,Recall (Detection Rate): 100.00%
+Binary_Model_Per_Family_Recall,DDoS,2961,2960,1.0,0.999662276258021,0.9998311096098632,Recall (Detection Rate): 99.97%
+Binary_Model_Per_Family_Recall,C&C (Generic),3060,3056,1.0,0.9986928104575163,0.999345977763244,Recall (Detection Rate): 99.87%
+Binary_Model_Per_Family_Recall,Attack/BruteForce,1487,1481,1.0,0.995965030262273,0.9979784366576818,Recall (Detection Rate): 99.60%
+Binary_Model_Per_Family_Recall,Torii (C&C),2,0,0.0,0.0,0.0,Recall (Detection Rate): 0.00%
+Binary_Model_Per_Scenario_Recall,Hajime,397485,397485,1.0,1.0,1.0,Scenario Malicious Recall: 100.00%
+Binary_Model_Per_Scenario_Recall,Hakai,1601,1601,1.0,1.0,1.0,Scenario Malicious Recall: 100.00%
+Binary_Model_Per_Scenario_Recall,Mirai-48,500151,500148,1.0,0.9999940018114529,0.9999940018114529,Scenario Malicious Recall: 100.00%
+Binary_Model_Per_Scenario_Recall,Mirai-Var,4339,4334,1.0,0.9988476607513251,0.9988476607513251,Scenario Malicious Recall: 99.88%
+Binary_Model_Per_Scenario_Recall,Mirai/Kenjiro,106930,106922,1.0,0.9999251847002713,0.9999251847002713,Scenario Malicious Recall: 99.99%
+Binary_Model_Per_Scenario_Recall,Muhstik,29159,29155,1.0,0.9998628210843993,0.9998628210843993,Scenario Malicious Recall: 99.99%
+Binary_Model_Per_Scenario_Recall,Torii-1,1,0,0.0,0.0,0.0,Scenario Malicious Recall: 0.00%
+Binary_Model_Per_Scenario_Recall,Torii-2,1,0,0.0,0.0,0.0,Scenario Malicious Recall: 0.00%
+Dedicated_Multiclass_Model,Attack/BruteForce,1487,1481,0.9579560155239327,0.995965030262273,0.9765908341575997,"Precision=95.80%, Recall=99.60%, F1=97.66%"
+Dedicated_Multiclass_Model,Benign,99592,99533,0.9997790166239767,0.9994075829383886,0.9995932652764039,"Precision=99.98%, Recall=99.94%, F1=99.96%"
+Dedicated_Multiclass_Model,C&C (Generic),3060,2956,0.8548293811451706,0.9660130718954248,0.9070266953053083,"Precision=85.48%, Recall=96.60%, F1=90.70%"
+Dedicated_Multiclass_Model,DDoS,2961,2960,1.0,0.999662276258021,0.9998311096098632,"Precision=100.00%, Recall=99.97%, F1=99.98%"
+Dedicated_Multiclass_Model,PortScan,1032157,1031639,0.9999040454068766,0.9994981383646092,0.9997010506832954,"Precision=99.99%, Recall=99.95%, F1=99.97%"
+Dedicated_Multiclass_Model,Torii (C&C),2,2,1.0,1.0,1.0,"Precision=100.00%, Recall=100.00%, F1=100.00%"

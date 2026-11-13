@@ -1,0 +1,3 @@
+Model_Name,Test_Scenario,Total_Samples,Malicious_Count,Benign_Count,TP,TN,FP,FN,Accuracy,Precision,Recall,F1_Score,ROC_AUC,PR_AUC,FPR,FNR
+Deployed Bundle (LGBM - Trained with Stratified Split),OOD_Torii_Combined (Capture-20 & Capture-21),6495,30,6465,14,6465,0,16,0.9975365665896844,1.0,0.4666666666666667,0.6363636363636364,1.0,1.0,0.0,0.5333333333333333
+Strict OOD Model (LGBM - Zero Torii in Training Data),OOD_Torii_Combined (Capture-20 & Capture-21),6495,30,6465,0,6465,0,30,0.9953810623556582,0.0,0.0,0.0,0.9667904098994586,0.529586244108711,0.0,1.0
