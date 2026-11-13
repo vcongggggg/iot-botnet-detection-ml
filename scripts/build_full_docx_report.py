@@ -1031,7 +1031,7 @@ def build_complete_word_report():
         ("1", "Lưu lượng Người dùng Hợp lệ (benign_traffic)", "192.168.1.20 (SmartHome-User)", "TCP / 80, 443, 1883", "SF / ShADadFf", "Benign (Sạch) - 100%", "Benign (Lưu lượng IoT hợp lệ)", "ALLOW (Cho phép)"),
         ("2", "Pha 1: Quét cổng ngang (mirai_port_scan)", "192.168.1.105 (Kali-MiraiScan)", "TCP / 23, 2323, 22, 80, 5555, 7547", "S0 / S (0 bytes)", "Malicious (Độc hại) - 100%", "Mirai/Hajime - Horizontal Port Scan (S0)", "BLOCK (Khóa IP)"),
         ("3", "Pha 2: Dò mật khẩu Telnet (mirai_bruteforce)", "192.168.1.106 (Kali-BruteForce)", "TCP / 2323 (Telnet)", "S0 / S (6 cặp mật khẩu)", "Malicious (Độc hại) - 100%", "Mirai - Telnet/SSH Credential Brute-Force", "BLOCK (Khóa IP)"),
-        ("4", "Pha 3: Kết nối máy chủ C&C (torii_cnc)", "192.168.1.107 (Botnet-ToriiCnC)", "TCP / 4444, 6667, 8443", "S0 / S (Beaconing)", "Malicious (Độc hại) - 99.8%", "Torii Botnet - C&C Beaconing & Reverse Shell", "BLOCK (Khóa IP)"),
+        ("4", "Pha 3: Kết nối máy chủ C&C (torii_cnc)", "192.168.1.107 (Botnet-ToriiCnC)", "TCP / 4444, 6667, 8443", "S0 / S (Beaconing)", "Malicious - chặn 1/4 (25%)", "Torii Botnet - C&C Beaconing & Reverse Shell", "BLOCK 1/4 - sót 4444 (x2), 8443"),
         ("5", "Pha 4: Tấn công từ chối dịch vụ (hajime_ddos)", "192.168.1.108 (Botnet-HajimeDDoS)", "TCP / 80, 8088", "S0 / S (Flood 220 pkts)", "Malicious (Độc hại) - 100%", "Hajime/Mirai - DDoS SYN/UDP Flood", "BLOCK (Khóa IP)"),
     ]
     add_styled_table(
