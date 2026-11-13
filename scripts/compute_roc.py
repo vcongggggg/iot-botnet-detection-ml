@@ -74,20 +74,20 @@ def compute_roc_curves(n_train_samples: int = 150000, n_test_samples: int = 5000
 
     # Huấn luyện 4 mô hình đối chứng
     print("  + Đang huấn luyện Logistic Regression...")
-    lr_model = LogisticRegression(max_iter=500, random_state=42)
+    lr_model = LogisticRegression(max_iter=200, random_state=42)
     lr_model.fit(X_train_scaled, y_train)
 
     print("  + Đang huấn luyện Decision Tree...")
-    dt_model = DecisionTreeClassifier(max_depth=16, random_state=42)
+    dt_model = DecisionTreeClassifier(max_depth=12, random_state=42)
     dt_model.fit(X_train, y_train)
 
     print("  + Đang huấn luyện Random Forest...")
-    rf_model = RandomForestClassifier(n_estimators=50, max_depth=14, n_jobs=-1, random_state=42)
+    rf_model = RandomForestClassifier(n_estimators=25, max_depth=12, n_jobs=-1, random_state=42)
     rf_model.fit(X_train, y_train)
 
     print("  + Đang huấn luyện XGBoost (Hist)...")
     xgb_model = xgb.XGBClassifier(
-        n_estimators=70, max_depth=6, learning_rate=0.1,
+        n_estimators=100, max_depth=6, learning_rate=0.1,
         eval_metric='logloss', random_state=42, n_jobs=-1, tree_method='hist'
     )
     xgb_model.fit(X_train, y_train)
