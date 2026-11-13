@@ -82,8 +82,7 @@ class IoTDeviceHTTPHandler(BaseHTTPRequestHandler):
             "resp_pkts": random.randint(5, 12),
             "resp_ip_bytes": random.randint(1500, 5100),
             "conn_state": "SF",
-            "history": "ShADadFf",
-            "attack_type_hint": "User Web Access (HTTP)"
+            "history": "ShADadFf"
         }
         verdict = forward_flow_to_guardian(flow)
         if verdict.get("action") == "BLOCK":
@@ -195,8 +194,7 @@ class IoTDeviceHTTPHandler(BaseHTTPRequestHandler):
                 "resp_pkts": random.randint(2, 6),
                 "resp_ip_bytes": random.randint(180, 600),
                 "conn_state": "SF",
-                "history": "ShADadFf" if "ntp" not in self.path else "Dd",
-                "attack_type_hint": "Benign User IoT Command"
+                "history": "ShADadFf" if "ntp" not in self.path else "Dd"
             }
             verdict = forward_flow_to_guardian(flow)
             self.send_response(200)
@@ -252,8 +250,7 @@ def auto_telemetry_loop():
             "resp_pkts": random.randint(2, 8),
             "resp_ip_bytes": random.randint(180, 820),
             "conn_state": "SF",
-            "history": "ShADadFf",
-            "attack_type_hint": "Benign IoT Sensor Telemetry"
+            "history": "ShADadFf"
         }
         forward_flow_to_guardian(flow)
 

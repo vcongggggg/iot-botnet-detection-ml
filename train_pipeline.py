@@ -7,6 +7,9 @@ trên Bộ dữ liệu Chuẩn quốc tế Stratosphere IoT-23 (Zeek / Bro conn.
 - Sử dụng ĐÚNG 12 đặc trưng luồng mạng (9 số học + 3 phân loại).
 - Loại bỏ hoàn toàn các trường định danh tĩnh: 'ts', 'uid', 'id.orig_h', 'id.resp_h',
   'local_orig', 'local_resp', 'service', 'missed_bytes', 'tunnel_parents'.
+- Siêu tham số chuẩn hóa: LR(max_iter=200), DT(max_depth=12), RF(n_estimators=25, max_depth=12),
+  XGBoost(n_estimators=100, max_depth=6, lr=0.1), LightGBM(n_estimators=100, max_depth=6, lr=0.1).
+- Tự động đóng gói và xuất file `iot_nids_bundle.joblib` sẵn sàng cho suy luận.
 - Mặc định đọc TOÀN BỘ dữ liệu (hỗ trợ tùy chọn --rows để giới hạn mẫu khi kiểm thử).
 """
 
@@ -147,15 +150,15 @@ def train_and_evaluate(X, y, class_names):
 
     models = {
         "Logistic Regression": {
-            "model": LogisticRegression(max_iter=500, random_state=42),
+            "model": LogisticRegression(max_iter=200, random_state=42),
             "use_scaled": True
         },
         "Decision Tree": {
-            "model": DecisionTreeClassifier(max_depth=16, random_state=42),
+            "model": DecisionTreeClassifier(max_depth=12, random_state=42),
             "use_scaled": False
         },
         "Random Forest": {
-            "model": RandomForestClassifier(n_estimators=70, max_depth=14, n_jobs=-1, random_state=42),
+            "model": RandomForestClassifier(n_estimators=25, max_depth=12, n_jobs=-1, random_state=42),
             "use_scaled": False
         },
         "XGBoost": {
@@ -249,6 +252,19 @@ def main():
     report_path = os.path.join(base_dir, "benchmark_results.csv")
     results_df.to_csv(report_path, index=False)
     print(f"\n[+] Đã lưu kết quả benchmark vào: {report_path}")
+
+    # Đóng gói toàn diện mô hình LightGBM cùng các encoders & scalers (iot_nids_bundle.joblib)
+    bundle_path = os.path.join(base_dir, "iot_nids_bundle.joblib")
+    save_bundle = {
+        "model": model,
+        "encoders": encoders,
+        "scaler": scaler,
+        "features": feature_cols,
+        "numeric_cols": NUMERIC_FEATURES,
+        "categorical_cols": CATEGORICAL_FEATURES
+    }
+    joblib.dump(save_bundle, bundle_path)
+    print(f"[+] Đã đóng gói và lưu bundle vào: {bundle_path}")
 
 
 if __name__ == "__main__":

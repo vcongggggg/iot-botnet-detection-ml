@@ -74,8 +74,7 @@ def launch_scenario(scenario_name, attacker_ip="192.168.1.105 (Attacker-Kali)", 
                 "resp_pkts": 0,
                 "resp_ip_bytes": 0,
                 "conn_state": "S0",
-                "history": "S",
-                "attack_type_hint": f"Mirai Port Scan (SYN -> Port {p})"
+                "history": "S"
             }
             results.append(send_flow_to_target(flow, guardian_url))
             time.sleep(0.08)
@@ -98,8 +97,7 @@ def launch_scenario(scenario_name, attacker_ip="192.168.1.105 (Attacker-Kali)", 
                 "resp_pkts": 0,
                 "resp_ip_bytes": 0,
                 "conn_state": "S0",
-                "history": "S",
-                "attack_type_hint": f"Mirai Brute-Force Telnet ({cred})"
+                "history": "S"
             }
             results.append(send_flow_to_target(flow, guardian_url))
             time.sleep(0.08)
@@ -121,8 +119,7 @@ def launch_scenario(scenario_name, attacker_ip="192.168.1.105 (Attacker-Kali)", 
                 "resp_pkts": 0,
                 "resp_ip_bytes": 0,
                 "conn_state": "S0",
-                "history": "S",
-                "attack_type_hint": f"Torii C&C Beaconing (Port {p})"
+                "history": "S"
             }
             results.append(send_flow_to_target(flow, guardian_url))
             time.sleep(0.08)
@@ -144,8 +141,7 @@ def launch_scenario(scenario_name, attacker_ip="192.168.1.105 (Attacker-Kali)", 
                 "resp_pkts": 0,
                 "resp_ip_bytes": 0,
                 "conn_state": "S0",
-                "history": "S",
-                "attack_type_hint": "Hajime/Mirai DDoS SYN Flood"
+                "history": "S"
             }
             results.append(send_flow_to_target(flow, guardian_url))
             time.sleep(0.05)
@@ -167,8 +163,7 @@ def launch_scenario(scenario_name, attacker_ip="192.168.1.105 (Attacker-Kali)", 
                 "resp_pkts": random.randint(3, 9),
                 "resp_ip_bytes": random.randint(240, 960),
                 "conn_state": "SF",
-                "history": "ShADadFf" if p not in [53, 123] else "Dd",
-                "attack_type_hint": "Benign SmartHome Traffic"
+                "history": "ShADadFf" if p not in [53, 123] else "Dd"
             }
             results.append(send_flow_to_target(flow, guardian_url))
             time.sleep(0.08)

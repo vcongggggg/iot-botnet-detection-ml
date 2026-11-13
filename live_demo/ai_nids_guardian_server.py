@@ -69,23 +69,12 @@ def classify_botnet_behavior(flow_dict, pred_label):
     """Phân loại chi tiết họ mã độc và hành vi dựa trên đặc trưng luồng mạng khi AI phát hiện Malicious."""
     if pred_label == 0:
         return "Benign (Lưu lượng IoT hợp lệ)"
-    hint = str(flow_dict.get("attack_type_hint", ""))
     dst_port = int(flow_dict.get("id.resp_p", 0))
     conn_state = str(flow_dict.get("conn_state", "S0"))
     orig_pkts = int(flow_dict.get("orig_pkts", 1))
     orig_bytes = int(flow_dict.get("orig_bytes", 0))
 
-    # Ưu tiên phân loại chi tiết theo ngữ cảnh gói tin / đặc trưng hành vi
-    if "Brute-Force" in hint:
-        return "Mirai - Telnet/SSH Credential Brute-Force"
-    if "Torii" in hint or "C&C" in hint:
-        return "Torii Botnet - C&C Beaconing & Reverse Shell"
-    if "DDoS" in hint:
-        return "Hajime/Mirai - DDoS SYN/UDP Flood"
-    if "Mirai Port Scan" in hint:
-        return "Mirai/Hajime - Horizontal Port Scan (S0)"
-
-    # Phân loại thuần túy bằng đặc trưng luồng mạng (khi không có hint)
+    # Phân loại thuần túy bằng 12 đặc trưng luồng mạng thực tế (không dùng gợi ý)
     if dst_port in [4444, 6667, 8443, 9001]:
         return "Torii Botnet - C&C Beaconing & Reverse Shell"
     if orig_pkts > 20 or orig_bytes > 5000:
@@ -123,13 +112,6 @@ def inspect_single_flow(flow_dict):
     pred = int(model.predict(X_input)[0])
     proba = model.predict_proba(X_input)[0]
     confidence = float(np.max(proba) * 100.0)
-
-    # Tầng Hybrid Threat Intelligence: Phát hiện kết nối C&C Reverse Shell trên các cổng độc hại đặc trưng của Torii (4444, 6667, 8443)
-    dst_port = int(flow_dict.get("id.resp_p", 0))
-    hint = str(flow_dict.get("attack_type_hint", ""))
-    if pred == 0 and (dst_port in [4444, 6667, 8443, 9001] or "Torii" in hint or "C&C" in hint):
-        pred = 1
-        confidence = 99.8
 
     elapsed_ms = (time.perf_counter() - t0) * 1000.0
 
